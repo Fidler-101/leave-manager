@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head th:fragment="head(pageTitle)">
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title th:text="${pageTitle} + ' – LeaveManager'">LeaveManager</title>
+    <link rel="stylesheet" th:href="@{/css/main.css}"/>
+    <meta name="_csrf" th:content="${_csrf.token}"/>
+    <meta name="_csrf_header" th:content="${_csrf.headerName}"/>
+</head>
+
+<!-- Sidebar fragment -->
+<aside th:fragment="sidebar(activePage)" class="sidebar" id="sidebar">
+    <!-- Logo -->
+    <div class="sidebar-logo">
+        <div class="sidebar-brand-icon">LM</div>
+        <span class="sidebar-brand-text">LeaveManager</span>
+    </div>
+
+    <!-- User info -->
+    <div class="sidebar-user">
+        <div class="sidebar-avatar" th:text="${user.initials}">JD</div>
+        <div class="sidebar-user-info">
+            <p class="sidebar-user-name" th:text="${user.fullName}">John Doe</p>
+            <p class="sidebar-user-dept" th:text="${user.department}">Engineering</p>
+        </div>
+    </div>
+
+    <!-- Nav - Employee -->
+    <nav class="sidebar-nav" sec:authorize="hasRole('EMPLOYEE')">
+        <p class="sidebar-section-label">Employee</p>
+        <a th:href="@{/employee/dashboard}"
+           th:classappend="${activePage == 'dashboard'} ? 'active' : ''"
+           class="sidebar-link">
+            <span class="sidebar-link-icon">⊞</span>
+            <span class="sidebar-link-text">My Dashboard</span>
+        </a>
+        <a th:href="@{/employee/apply}"
+           th:classappend="${activePage == 'apply'} ? 'active' : ''"
+           class="sidebar-link">
+            <span class="sidebar-link-icon">📋</span>
+            <span class="sidebar-link-text">Apply for Leave</span>
+        </a>
+        <a th:href="@{/employee/history}"
+           th:classappend="${activePage == 'history'} ? 'active' : ''"
+           class="sidebar-link">
+            <span class="sidebar-link-icon">📜</span>
+            <span class="sidebar-link-text">My History</span>
+        </a>
+    </nav>
+
+    <!-- Nav - Manager -->
+    <nav class="sidebar-nav" sec:authorize="hasAnyRole('MANAGER','ADMIN')">
+        <p class="sidebar-section-label">Manager</p>
+        <a th:href="@{/manager/dashboard}"
+           th:classappend="${activePage == 'dashboard'} ? 'active' : ''"
+           class="sidebar-link">
+            <span class="sidebar-link-icon">⊞</span>
+            <span class="sidebar-link-text">Team Overview</span>
+        </a>
+        <a th:href="@{/manager/approvals}"
+           th:classappend="${activePage == 'approvals'} ? 'active' : ''"
+           class="sidebar-link">
+            <span class="sidebar-link-icon">✓</span>
+            <span class="sidebar-link-text">Pending Approvals</span>
+        </a>
+        <a th:href="@{/manager/team}"
+           th:classappend="${activePage == 'team'} ? 'active' : ''"
+           class="sidebar-link">
+            <span class="sidebar-link-icon">👥</span>
+            <span class="sidebar-link-text">Team Members</span>
+        </a>
+        <a th:href="@{/manager/history}"
+           th:classappend="${activePage == 'history'} ? 'active' : ''"
+           class="sidebar-link">
+            <span class="sidebar-link-icon">📜</span>
+            <span class="sidebar-link-text">All Requests</span>
+        </a>
+    </nav>
+
+    <!-- Bottom -->
+    <div class="sidebar-bottom">
+        <form th:action="@{/logout}" method="post">
+            <button type="submit" class="sidebar-link sidebar-logout">
+                <span class="sidebar-link-icon">🚪</span>
+                <span class="sidebar-link-text">Logout</span>
+            </button>
+        </form>
+        <button class="sidebar-link" onclick="toggleSidebar()" id="collapseBtn">
+            <span class="sidebar-link-icon" id="collapseIcon">‹</span>
+            <span class="sidebar-link-text">Collapse</span>
+        </button>
+    </div>
+</aside>
+</html>

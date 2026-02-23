@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>LeaveManager – Sign In</title>
+    <link rel="stylesheet" th:href="@{/css/main.css}"/>
+</head>
+<body class="auth-body">
+
+<div class="auth-bg-blob auth-blob-1"></div>
+<div class="auth-bg-blob auth-blob-2"></div>
+
+<div class="auth-wrapper">
+    <div class="auth-card">
+
+        <!-- Logo -->
+        <div class="auth-logo">
+            <div class="auth-icon">📅</div>
+            <h1 class="auth-title">Welcome back</h1>
+            <p class="auth-subtitle">Sign in to LeaveManager</p>
+        </div>
+
+        <!-- Alerts -->
+        <div th:if="${error}" class="alert alert-danger">
+            <span>⚠️</span> <span th:text="${error}"></span>
+        </div>
+        <div th:if="${logout}" class="alert alert-success">
+            <span>✓</span> <span th:text="${logout}"></span>
+        </div>
+
+        <!-- Login Form -->
+        <form th:action="@{/login}" method="post" class="auth-form" id="loginForm">
+            <div class="form-group">
+                <label for="email" class="form-label">Email Address</label>
+                <input type="email" id="email" name="email"
+                       class="form-input" placeholder="you@company.com"
+                       required autocomplete="email"/>
+            </div>
+
+            <div class="form-group">
+                <label for="password" class="form-label">Password</label>
+                <div class="input-wrapper">
+                    <input type="password" id="password" name="password"
+                           class="form-input" placeholder="Enter your password"
+                           required autocomplete="current-password"/>
+                    <button type="button" class="toggle-pw" onclick="togglePassword()" title="Show/hide password">
+                        <span id="pwIcon">👁️</span>
+                    </button>
+                </div>
+            </div>
+
+            <button type="submit" class="btn btn-primary btn-full" id="submitBtn">
+                Sign In
+            </button>
+        </form>
+
+        <!-- Demo accounts hint -->
+        <div class="demo-box">
+            <p class="demo-title">Demo Accounts — click to fill</p>
+            <div class="demo-accounts">
+                <button type="button" class="demo-account"
+                        onclick="fillDemo('john@company.com','employee123')">
+                    <span class="demo-icon">👤</span>
+                    <div>
+                        <p class="demo-role">Employee</p>
+                        <p class="demo-cred">john@company.com / employee123</p>
+                    </div>
+                </button>
+                <button type="button" class="demo-account"
+                        onclick="fillDemo('jane@company.com','manager123')">
+                    <span class="demo-icon">🏢</span>
+                    <div>
+                        <p class="demo-role">Manager</p>
+                        <p class="demo-cred">jane@company.com / manager123</p>
+                    </div>
+                </button>
+            </div>
+        </div>
+
+        <p class="auth-footer">Leave Management System · v1.0</p>
+    </div>
+</div>
+
+<script>
+function togglePassword() {
+    const pw = document.getElementById('password');
+    const icon = document.getElementById('pwIcon');
+    pw.type = pw.type === 'password' ? 'text' : 'password';
+    icon.textContent = pw.type === 'password' ? '👁️' : '🙈';
+}
+function fillDemo(email, password) {
+    document.getElementById('email').value = email;
+    document.getElementById('password').value = password;
+}
+document.getElementById('loginForm').addEventListener('submit', function() {
+    const btn = document.getElementById('submitBtn');
+    btn.textContent = 'Signing in...';
+    btn.disabled = true;
+});
+</script>
+</body>
+</html>
